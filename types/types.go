@@ -6,3 +6,8 @@ type CrtData struct {
 	TargetSuffixes string
 	WebhookURL     string
 }
+
+type HTTPEchoData struct {
+	Host string
+	Port int
+}
