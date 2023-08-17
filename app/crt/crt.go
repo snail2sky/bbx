@@ -28,22 +28,26 @@ func (d *DefaultCertificateChecker) CheckCertificate(certPath, webhookURL string
 	if err != nil {
 		return err
 	}
+	var cert *x509.Certificate
+	for {
+		block, reset := pem.Decode(certData)
+		if block == nil {
+			break
+		}
+		certData = reset
+		if block.Type != "CERTIFICATE" {
+			continue
+		}
 
-	block, _ := pem.Decode(certData)
-	if block == nil || block.Type != "CERTIFICATE" {
-		return fmt.Errorf("failed to decode certificate")
-	}
-
-	cert, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		return err
-	}
-
-	daysUntilExpiration := int(cert.NotAfter.Sub(time.Now()).Hours() / 24)
-	if daysUntilExpiration <= warningDays {
-		msg := fmt.Sprintf("Certificate at %s will expire in %d days\n", certPath, daysUntilExpiration)
-
-		alert(webhookURL, "证书即将到期", msg)
+		cert, err = x509.ParseCertificate(block.Bytes)
+		if err != nil {
+			return err
+		}
+		daysUntilExpiration := int(cert.NotAfter.Sub(time.Now()).Hours() / 24)
+		if daysUntilExpiration <= warningDays {
+			msg := fmt.Sprintf("Certificate at %s will expire in %d days\n", certPath, daysUntilExpiration)
+			alert(webhookURL, "证书即将到期", msg)
+		}
 	}
 
 	return nil
