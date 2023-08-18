@@ -46,7 +46,15 @@ func (d *DefaultCertificateChecker) CheckCertificate(certPath, webhookURL string
 		}
 		daysUntilExpiration := int(cert.NotAfter.Sub(time.Now()).Hours() / 24)
 		if daysUntilExpiration <= warningDays {
-			msg := fmt.Sprintf("Host: %s Certificate at %s will expire in %d days\n", tools.IP("v4"), certPath, daysUntilExpiration)
+			//msg := fmt.Sprintf(`Host: %s Certificate at %s will expire in %d days`, tools.IP("v4"), certPath, daysUntilExpiration)
+			msg := fmt.Sprintf(`
+        [%s] 证书还有 [%d] 天到期，避免影响业务的正常运行请及时更新。
+        =========================================================
+        颁发机构: %s
+        域名信息: %s
+        有效期至: %s
+        机器IP:   %s
+`, cert.Subject.CommonName, daysUntilExpiration, cert.Issuer.CommonName, cert.DNSNames, cert.NotAfter, tools.IP("v4"))
 			alert(webhookURL, "证书即将到期", msg)
 		}
 	}
