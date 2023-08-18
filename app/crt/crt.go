@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"github.com/snail2sky/bbx/tools"
 	"github.com/snail2sky/bbx/types"
 	"log"
 	"net/http"
@@ -45,7 +46,7 @@ func (d *DefaultCertificateChecker) CheckCertificate(certPath, webhookURL string
 		}
 		daysUntilExpiration := int(cert.NotAfter.Sub(time.Now()).Hours() / 24)
 		if daysUntilExpiration <= warningDays {
-			msg := fmt.Sprintf("Certificate at %s will expire in %d days\n", certPath, daysUntilExpiration)
+			msg := fmt.Sprintf("Host: %s Certificate at %s will expire in %d days\n", tools.IP("v4"), certPath, daysUntilExpiration)
 			alert(webhookURL, "证书即将到期", msg)
 		}
 	}
