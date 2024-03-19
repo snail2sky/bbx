@@ -1,16 +1,15 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
+	"os"
 )
 
-// rootCmd represents the base command when called without any subcommands
+// RootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "bbx",
-	Short: "An operator tool set",
-	Long:  `Supply some useful tools, such as cert check, nameserver check, etc.`,
+	Short: "Tools like busybox, which include some commonly used operation and maintenance tools",
+	Long:  `Tools like busybox, which include some commonly used operation and maintenance tools`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -32,7 +31,7 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.bbx.yaml)")
 
-	// Cobra also supports local flags, which will only run
+	// Cobra also supports local flags, which will only people_run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
