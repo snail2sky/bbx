@@ -8,7 +8,6 @@
 *.so
 *.dylib
 .idea
-go.sum
 bbx
 
 # Test binary, built with `go test -c`

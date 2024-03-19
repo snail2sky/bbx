@@ -11,18 +11,27 @@ endif
 
 auto: $(TARGET)
 
+tidy:
+		@go mod tidy
+
+build:
+		@go build
+
+
+compile:
+		@make tidy && make build
 
 mac:
 		@echo "build for mac"
-		@export GOOS=darwin && go build
+		@export GOOS=darwin && make compile
 
 linux:
 		@echo "build for linux"
-		@export GOOS=linux && go build
+		@export GOOS=linux && make compile
 
 windows:
 		@echo "build for windows"
-		@export GOOS=windows && go build
+		@export GOOS=windows && make compile
 
 install:
 		@echo "install bbx"
