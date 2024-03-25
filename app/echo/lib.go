@@ -2,10 +2,12 @@ package echo
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/spf13/cobra"
 	"io"
 	"log"
 	"net"
+	"net/http"
 )
 
 type Config struct {
@@ -25,7 +27,7 @@ func NewConfig(cmd *cobra.Command, args []string) *Config {
 	}
 }
 
-func (t *Config) serveTCP(addr string, protocol string) {
+func (c *Config) serveTCP(addr string, protocol string) {
 	log.Printf("ECHO server listen on <%s> %s\n", protocol, addr)
 	sock, err := net.Listen(protocol, addr)
 	if err != nil {
@@ -37,11 +39,11 @@ func (t *Config) serveTCP(addr string, protocol string) {
 		if err != nil {
 			log.Print(err)
 		}
-		go t.handleTCPConn(conn)
+		go c.handleTCPConn(conn)
 	}
 }
 
-func (t *Config) serveUDP(addr string, protocol string) {
+func (c *Config) serveUDP(addr string, protocol string) {
 	log.Printf("ECHO server listen on <%s> %s", protocol, addr)
 	udpAddr, err := net.ResolveUDPAddr(protocol, addr)
 	if err != nil {
@@ -52,31 +54,41 @@ func (t *Config) serveUDP(addr string, protocol string) {
 		log.Fatal(err)
 	}
 	for {
-		var data = make([]byte, t.bufSize)
+		var data = make([]byte, c.bufSize)
 		n, addr, err := sock.ReadFromUDP(data)
 		if err == io.EOF || err != nil {
 			log.Print(err)
 		}
-		go t.handleUDPConn(sock, data[:n], addr)
+		go c.handleUDPConn(sock, data[:n], addr)
 	}
 }
 
-func (t *Config) serve(addr string, protocol string) {
+func (c *Config) serveHTTP(addr string) {
+	var listenOn = fmt.Sprintf("%s", addr)
+	log.Println("HTTP echo server listen on:", listenOn)
+
+	http.HandleFunc("/", c.handleHTTPConn)
+	log.Println(http.ListenAndServe(listenOn, nil))
+}
+
+func (c *Config) serve(addr string, protocol string) {
 	switch protocol {
 	case "tcp":
-		t.serveTCP(addr, protocol)
+		c.serveTCP(addr, protocol)
 	case "udp":
-		t.serveUDP(addr, protocol)
+		c.serveUDP(addr, protocol)
+	case "http":
+		c.serveHTTP(addr)
 	}
 }
 
-func (t *Config) handleTCPConn(conn net.Conn) {
+func (c *Config) handleTCPConn(conn net.Conn) {
 	protocol := "tcp"
 	r := bufio.NewReader(conn)
 	w := bufio.NewWriter(conn)
 	defer conn.Close()
 	for {
-		var data = make([]byte, t.bufSize)
+		var data = make([]byte, c.bufSize)
 		n, err := r.Read(data)
 		if err == io.EOF || err != nil {
 			break
@@ -88,8 +100,16 @@ func (t *Config) handleTCPConn(conn net.Conn) {
 	log.Printf("ECHO server close old connection <%s> %s<->%s", protocol, conn.LocalAddr(), conn.RemoteAddr())
 }
 
-func (t *Config) handleUDPConn(conn *net.UDPConn, data []byte, addr *net.UDPAddr) {
+func (c *Config) handleUDPConn(conn *net.UDPConn, data []byte, addr *net.UDPAddr) {
 	protocol := "udp"
 	log.Printf("ECHO server receive new data <%s> %s<->%s, length: %d", protocol, conn.LocalAddr(), addr, len(data))
-	conn.WriteTo(data, addr)
+	_, _ = conn.WriteTo(data, addr)
+}
+
+func (c *Config) handleHTTPConn(writer http.ResponseWriter, request *http.Request) {
+	log.Println(fmt.Sprintf("HTTP echo server handle request: <%s %s %s> from client (%s) ", request.Method, request.RequestURI, request.Proto, request.RemoteAddr))
+	err := request.Write(writer)
+	if err != nil {
+		log.Println(err)
+	}
 }

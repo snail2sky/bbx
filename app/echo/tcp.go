@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (t *Config) TCPRun() {
-	addr := fmt.Sprintf("%s:%d", t.host, t.port)
-	t.serve(addr, "tcp")
+func (c *Config) TCPRun() {
+	addr := fmt.Sprintf("%s:%d", c.host, c.port)
+	c.serve(addr, "tcp")
 }

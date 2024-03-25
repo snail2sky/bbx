@@ -2,7 +2,7 @@ package echo
 
 import "fmt"
 
-func (c *Config) UDPRun() {
+func (c *Config) HTTPRun() {
 	addr := fmt.Sprintf("%s:%d", c.host, c.port)
-	c.serve(addr, "udp")
+	c.serve(addr, "http")
 }
