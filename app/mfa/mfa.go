@@ -6,6 +6,7 @@ import (
 	"crypto/sha1"
 	"encoding/base32"
 	"encoding/binary"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -14,7 +15,7 @@ import (
 // Panic if error is not nil
 func check(e error) {
 	if e != nil {
-		panic(e)
+		log.Fatalln(e)
 	}
 }
 
