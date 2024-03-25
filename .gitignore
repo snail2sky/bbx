@@ -10,6 +10,7 @@
 .idea
 bbx
 godaddy.key
+releases
 
 # Test binary, built with `go test -c`
 *.test
