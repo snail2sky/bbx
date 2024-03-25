@@ -9,7 +9,7 @@ else
 	endif
 endif
 
-TAG := "v1.1.0"
+TAG := "v1.0.1"
 OS_LIST := windows darwin linux
 ARCH_LIST := 386 amd64 arm64
 
@@ -44,12 +44,14 @@ install:
 gen_releases:
 		@for os in $(OS_LIST); do \
             for arch in $(ARCH_LIST); do \
-                echo "Build for $$os $$arch"; \
+              	exe=bbx-$$os-$$arch-$(TAG); \
                 export GOOS=$$os GOARCH=$$arch; \
                 if [ "$$os" = "windows" ]; then \
-                    go build -o releases/bbx-$$os-$$arch.exe; \
+                  	echo "$$exe".exe; \
+                    go build -o releases/$$exe.exe; \
                 else \
-                    go build -o releases/bbx-$$os-$$arch; \
+                  	echo "$$exe"; \
+                    go build -o releases/$$exe; \
                 fi; \
             done ; \
         done
