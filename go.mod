@@ -3,6 +3,7 @@ module github.com/snail2sky/bbx
 go 1.20
 
 require (
+	github.com/go-resty/resty/v2 v2.12.0
 	github.com/spf13/cobra v1.8.0
 	k8s.io/client-go v0.28.2
 )
@@ -26,12 +27,12 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
-	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/oauth2 v0.13.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
-	golang.org/x/time v0.3.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/term v0.18.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
