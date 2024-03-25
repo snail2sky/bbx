@@ -103,7 +103,7 @@ func (c *Config) walkDir(dir string) {
 
 				// 如果剩余有效时间小于指定值，打印警告
 				if uint(remainingDays) < c.expireDays {
-					log.Printf("Certificate %s in file %s will expire in %d days\n", cert.Subject.CommonName, info.Name(), remainingDays)
+					log.Printf("Certificate %s in file %s will expire in %d days\n", cert.Subject.CommonName, path, remainingDays)
 				}
 			}
 			block, rest = pem.Decode(rest)
