@@ -7,8 +7,8 @@ import (
 // verifyCmd represents the verify command
 var verifyCmd = &cobra.Command{
 	Use:   "verify",
-	Short: "Very something",
-	Long:  `Very something, such as cert valid, etc..`,
+	Short: "Verify something",
+	Long:  `Verify something, such as cert valid, etc..`,
 }
 
 func init() {
