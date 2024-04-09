@@ -59,6 +59,7 @@ func NewGodaddyConfig(cmd *cobra.Command, args []string) *Config {
 	recordType, _ := cmd.Flags().GetString("type")
 	apiURL, _ := cmd.Parent().PersistentFlags().GetString("api-url")
 	keyFile, _ := cmd.Parent().PersistentFlags().GetString("key-file")
+	proxy, _ := cmd.Parent().PersistentFlags().GetString("proxy")
 
 	content, err := os.ReadFile(keyFile)
 	if err != nil {
@@ -71,6 +72,9 @@ func NewGodaddyConfig(cmd *cobra.Command, args []string) *Config {
 	}
 
 	client := resty.New()
+	if proxy != "" {
+		client.SetProxy(proxy)
+	}
 
 	return &Config{
 		ttl:        ttl,
