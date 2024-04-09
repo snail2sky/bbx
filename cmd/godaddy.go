@@ -24,6 +24,9 @@ func init() {
 	godaddyCmd.PersistentFlags().String("api-url", "https://api.godaddy.com/v1/domains",
 		`The godaddy api URL`)
 
+	godaddyCmd.PersistentFlags().String("proxy", "",
+		`The proxy url, support only http proxy. such as http://127.0.0.1:1080`)
+
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// godaddyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
