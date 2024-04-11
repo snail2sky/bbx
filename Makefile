@@ -9,11 +9,15 @@ else
 	endif
 endif
 
-TAG := "v1.0.1"
+VERSION_FILE := cmd/version.go
+TAG := $(shell sed -rn 's/const version = "(.*)"/\1/p' $(VERSION_FILE))
 OS_LIST := windows darwin linux
 ARCH_LIST := 386 amd64 arm64
 
 auto: $(TARGET)
+
+test:
+		@echo $(TAG)
 
 tidy:
 		@go mod tidy
@@ -73,4 +77,4 @@ help:
 		@echo "clean:        make clean                      clean bbx and bbx.exe file"
 		@echo "clean_all     make clean_all                  clean all binary files"
 		@echo "install:      make install                    install binary file to GOBIN dir"
-		@echo "gen_releases: make gen_releases [TAG=v1.0.1]  generate releases into releases/\$$TAG dir"
+		@echo "gen_releases: make gen_releases               generate releases into releases/$(TAG)"
