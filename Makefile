@@ -42,16 +42,18 @@ install:
 		@go install
 
 gen_releases:
-		@for os in $(OS_LIST); do \
+		@echo Generate releases for $(TAG)
+		@RELEASE_DIR=releases/$(TAG) && mkdir -p $$RELEASE_DIR && \
+		for os in $(OS_LIST); do \
             for arch in $(ARCH_LIST); do \
-              	exe=bbx-$$os-$$arch-$(TAG); \
+              	exe=bbx-$$os-$$arch; \
                 export GOOS=$$os GOARCH=$$arch; \
                 if [ "$$os" = "windows" ]; then \
                   	echo "$$exe".exe; \
-                    go build -o releases/$$exe.exe; \
+                    go build -o $$RELEASE_DIR/$$exe.exe; \
                 else \
                   	echo "$$exe"; \
-                    go build -o releases/$$exe; \
+                    go build -o $$RELEASE_DIR/$$exe; \
                 fi; \
             done ; \
         done
@@ -61,7 +63,14 @@ clean:
 		@echo "clean bbx bbx.exe program"
 		@rm -f bbx bbx.exe
 
+
+clean_all:
+		@echo "clean all binary file, such bbx, bbx.exe and all releases"
+		@rm -rf bbx bbx.exe releases
+
 help:
-		@echo "build:   make [ mac | linux | windows ]"
-		@echo "clean:   make clean"
-		@echo "install: make install"
+		@echo "build:        make [ mac | linux | windows ]  build for mac linux or windows"
+		@echo "clean:        make clean                      clean bbx and bbx.exe file"
+		@echo "clean_all     make clean_all                  clean all binary files"
+		@echo "install:      make install                    install binary file to GOBIN dir"
+		@echo "gen_releases: make gen_releases [TAG=v1.0.1]  generate releases into releases/\$$TAG dir"
