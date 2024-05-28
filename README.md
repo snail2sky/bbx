@@ -21,6 +21,10 @@ The `bbx` provides some commonly used tools, the mini version of busybox, so it 
    5. get-all: Get all record of a domain
 6. alert: Alert something to somewhere
    1. feishu: Alert something to feishu group
+7. get: Get system information
+   1. net: get net info
+      1. ipv4: get ipv4 address
+      2. ipv6: get ipv6 address
 
 
 ## Build
@@ -35,10 +39,15 @@ make install
   
 ## Generate releases
 ```shell
-make gen_releases
+make gen-releases
 
 # Generate with TAG
-make gen_releases TAG=v1.0.1
+make gen-releases TAG=v1.0.1
+```
+
+## Build docker image
+```shell
+make build-image
 ```
 
 ## Usage
