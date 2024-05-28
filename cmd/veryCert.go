@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// certCmd represents the cert command
-var certCmd = &cobra.Command{
+// verifyCertCmd represents the cert command
+var verifyCertCmd = &cobra.Command{
 	Use:   "cert",
 	Short: "Verify cert valid",
 	Long:  `Verify cert valid and give Expiration`,
@@ -18,19 +18,19 @@ var certCmd = &cobra.Command{
 }
 
 func init() {
-	verifyCmd.AddCommand(certCmd)
+	verifyCmd.AddCommand(verifyCertCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// certCmd.PersistentFlags().String("foo", "", "A help for foo")
-	certCmd.Flags().StringSlice("cert-dir", []string{"./cert-dir"}, "The cert directory will be verify")
-	certCmd.Flags().StringSlice("suffix", []string{"cert", "crt", "pem"}, "The cert suffix list")
-	certCmd.Flags().Uint("expire", 30, "The cert expire days")
-	certCmd.Flags().Bool("recursive", true, "Whether to recursively traverse the directory specified by cert-dir")
+	// verifyCertCmd.PersistentFlags().String("foo", "", "A help for foo")
+	verifyCertCmd.Flags().StringSlice("cert-dir", []string{"./cert-dir"}, "The cert directory will be verify")
+	verifyCertCmd.Flags().StringSlice("suffix", []string{"cert", "crt", "pem"}, "The cert suffix list")
+	verifyCertCmd.Flags().Uint("expire", 30, "The cert expire days")
+	verifyCertCmd.Flags().Bool("recursive", true, "Whether to recursively traverse the directory specified by cert-dir")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// certCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// verifyCertCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

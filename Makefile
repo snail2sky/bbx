@@ -13,10 +13,6 @@ VERSION_FILE := cmd/version.go
 TAG := $(shell sed -rn 's/const version = "(.*)"/\1/p' $(VERSION_FILE))
 OS_LIST := windows darwin linux
 ARCH_LIST := 386 amd64 arm64
-GOOS := linux
-GOARCH := amd64
-GOPROXY := goproxy.io
-IMAGE := golang:1.22
 
 auto: $(TARGET)
 

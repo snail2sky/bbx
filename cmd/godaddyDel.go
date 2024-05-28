@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// delCmd represents the del command
-var delCmd = &cobra.Command{
+// godaddyDelCmd represents the del command
+var godaddyDelCmd = &cobra.Command{
 	Use:   "del",
 	Short: "Delete a DNS record",
 	Long:  `Use give info to delete a dns record`,
@@ -18,19 +18,19 @@ var delCmd = &cobra.Command{
 }
 
 func init() {
-	godaddyCmd.AddCommand(delCmd)
+	godaddyCmd.AddCommand(godaddyDelCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// delCmd.PersistentFlags().String("foo", "", "A help for foo")
-	delCmd.Flags().StringP("domain", "d", "snail2sky.live", "The DNS base domain")
-	delCmd.Flags().StringP("type", "t", "A", "The DNS record type")
-	delCmd.Flags().String("name", "", "The DNS record host")
+	// godaddyDelCmd.PersistentFlags().String("foo", "", "A help for foo")
+	godaddyDelCmd.Flags().StringP("domain", "d", "snail2sky.live", "The DNS base domain")
+	godaddyDelCmd.Flags().StringP("type", "t", "A", "The DNS record type")
+	godaddyDelCmd.Flags().String("name", "", "The DNS record host")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// delCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	_ = delCmd.MarkFlagRequired("name")
+	// godaddyDelCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	_ = godaddyDelCmd.MarkFlagRequired("name")
 }
