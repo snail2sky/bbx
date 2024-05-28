@@ -13,6 +13,10 @@ VERSION_FILE := cmd/version.go
 TAG := $(shell sed -rn 's/const version = "(.*)"/\1/p' $(VERSION_FILE))
 OS_LIST := windows darwin linux
 ARCH_LIST := 386 amd64 arm64
+GOOS := linux
+GOARCH := amd64
+GOPROXY := goproxy.io
+IMAGE := golang:1.22
 
 auto: $(TARGET)
 
@@ -45,7 +49,7 @@ install:
 		@echo "install bbx"
 		@go install
 
-gen_releases:
+gen-releases:
 		@echo Generate releases for $(TAG)
 		@RELEASE_DIR=releases/$(TAG) && mkdir -p $$RELEASE_DIR && \
 		for os in $(OS_LIST); do \
@@ -62,19 +66,29 @@ gen_releases:
             done ; \
         done
 
+build-image:
+		@echo "build docker image"
+		@docker build -t snail2sky/bbx:$(TAG) \
+			--build-arg GOOS=$(GOOS) \
+			--build-arg GOARCH=$(GOARCH) \
+			--build-arg GOPROXY=$(GOPROXY) \
+			--build-arg BUILD_TYPE=$(BUILD_TYPE) \
+			--build-arg IMAGE=$(IMAGE) \
+			.
 
 clean:
 		@echo "clean bbx bbx.exe program"
 		@rm -f bbx bbx.exe
 
 
-clean_all:
+clean-all:
 		@echo "clean all binary file, such bbx, bbx.exe and all releases"
 		@rm -rf bbx bbx.exe releases
 
 help:
 		@echo "build:        make [ mac | linux | windows ]  build for mac linux or windows"
 		@echo "clean:        make clean                      clean bbx and bbx.exe file"
-		@echo "clean_all     make clean_all                  clean all binary files"
+		@echo "clean-all     make clean-all                  clean all binary files"
 		@echo "install:      make install                    install binary file to GOBIN dir"
-		@echo "gen_releases: make gen_releases               generate releases into releases/$(TAG)"
+		@echo "build-image:  make build-image [GOOS=[linux|darwin|windows] | GOARCH=[amd64|arm64|...] | GOPROXY=goproxy.io | IMAGE=golang:1.22]"
+		@echo "gen-releases: make gen-releases               generate releases into releases/$(TAG)"
