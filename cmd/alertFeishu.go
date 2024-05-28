@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// feishuCmd represents the feishu command
-var feishuCmd = &cobra.Command{
+// alertFeishuCmd represents the feishu command
+var alertFeishuCmd = &cobra.Command{
 	Use:   "feishu '<message>'",
 	Short: "Send message to group",
 	Long:  `Send message to group, support @ somebody`,
@@ -19,19 +19,19 @@ var feishuCmd = &cobra.Command{
 }
 
 func init() {
-	alertCmd.AddCommand(feishuCmd)
+	alertCmd.AddCommand(alertFeishuCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// feishuCmd.PersistentFlags().String("foo", "", "A help for foo")
-	feishuCmd.Flags().StringP("webhook-url", "u", "", "The feishu webhook url")
-	feishuCmd.Flags().StringSlice("at", nil, `The message will be at someone, value is user_id list
+	// alertFeishuCmd.PersistentFlags().String("foo", "", "A help for foo")
+	alertFeishuCmd.Flags().StringP("webhook-url", "u", "", "The feishu webhook url")
+	alertFeishuCmd.Flags().StringSlice("at", nil, `The message will be at someone, value is user_id list
 support at many people, such as: ou_18ea???,ou_1823???`)
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// feishuCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// alertFeishuCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
-	_ = feishuCmd.MarkFlagRequired("webhook-url")
+	_ = alertFeishuCmd.MarkFlagRequired("webhook-url")
 }

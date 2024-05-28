@@ -5,8 +5,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// kubeConfigCmd represents the kubeconfig command
-var kubeConfigCmd = &cobra.Command{
+// mergeKubeConfigCmd represents the kubeconfig command
+var mergeKubeConfigCmd = &cobra.Command{
 	Use:   "kubeconfig <merged-file>",
 	Short: "merge kubeconfig",
 	Long:  `merge kubeconfig to single file`,
@@ -18,16 +18,16 @@ var kubeConfigCmd = &cobra.Command{
 }
 
 func init() {
-	mergeCmd.AddCommand(kubeConfigCmd)
+	mergeCmd.AddCommand(mergeKubeConfigCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// kubeConfigCmd.PersistentFlags().String("foo", "", "A help for foo")
-	kubeConfigCmd.Flags().StringP("config-dir", "c", "./config-dir", "The directory where all kubeconfig files are located")
-	kubeConfigCmd.Flags().String("suffix", ".yaml", "The suffix name of the kubeconfig file")
+	// mergeKubeConfigCmd.PersistentFlags().String("foo", "", "A help for foo")
+	mergeKubeConfigCmd.Flags().StringP("config-dir", "c", "./config-dir", "The directory where all kubeconfig files are located")
+	mergeKubeConfigCmd.Flags().String("suffix", ".yaml", "The suffix name of the kubeconfig file")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// kubeConfigCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// mergeKubeConfigCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
