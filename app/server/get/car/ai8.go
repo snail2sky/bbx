@@ -1,4 +1,4 @@
-package get
+package car
 
 import (
 	"github.com/gin-gonic/gin"
@@ -13,8 +13,12 @@ type AI8Config struct {
 func Ai8Num(c *gin.Context) {
 	var ai8Config AI8Config
 	if err := c.Bind(&ai8Config); err == nil {
-		password := car.GetArrizoPassword(ai8Config.Num)
-		c.String(http.StatusOK, password)
+		password, err := car.GetArrizoPassword(ai8Config.Num)
+		if err != nil {
+			c.String(http.StatusBadRequest, err.Error())
+		} else {
+			c.String(http.StatusOK, password)
+		}
 	} else {
 		c.String(http.StatusBadRequest, err.Error())
 	}

@@ -11,10 +11,14 @@ var getCarAI8Cmd = &cobra.Command{
 	Use:   "ai8",
 	Short: "Get Arrizo 8 project password",
 	Long:  `Get Arrizo 8 project password`,
-	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		password := car.GetArrizoPassword(args[0])
-		fmt.Println(password)
+		num := cmd.Flag("num").Value.String()
+		password, err := car.GetArrizoPassword(num)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(password)
+		}
 	},
 }
 
@@ -27,6 +31,8 @@ func init() {
 	// and all subcommands, e.g.:
 	// getCarAI8Cmd.PersistentFlags().String("foo", "", "A help for foo")
 
+	getCarAI8Cmd.Flags().StringP("num", "n", "", "Serial number of project")
+	_ = getCarAI8Cmd.MarkFlagRequired("num")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// getCarAI8Cmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
