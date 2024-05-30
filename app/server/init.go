@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	get2 "github.com/snail2sky/bbx/app/server/get"
+	get2 "github.com/snail2sky/bbx/app/server/get/car"
 	"github.com/spf13/cobra"
 	"log"
 	"net/http"
@@ -10,10 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setupRouter() *gin.Engine {
+func setupRouter(debug bool) *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
-	gin.SetMode(gin.ReleaseMode)
+	if !debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	r := gin.Default()
 
 	// Ping test
@@ -26,16 +28,20 @@ func setupRouter() *gin.Engine {
 	})
 
 	get := r.Group("/get")
+	getCar := get.Group("/car")
 
-	get.GET("/ai8", get2.Ai8Num)
+	getCar.GET("/ai8", get2.Ai8Num)
 	return r
 }
 
 func RunServer(cmd *cobra.Command) {
-	r := setupRouter()
 
 	host := cmd.Flag("host").Value.String()
 	port := cmd.Flag("port").Value.String()
+	debug, _ := cmd.Flags().GetBool("debug")
+
+	r := setupRouter(debug)
+
 	addr := fmt.Sprintf("%s:%s", host, port)
 
 	err := r.Run(addr)
