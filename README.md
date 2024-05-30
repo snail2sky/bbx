@@ -25,6 +25,9 @@ The `bbx` provides some commonly used tools, the mini version of busybox, so it 
    1. net: get net info
       1. ipv4: get ipv4 address
       2. ipv6: get ipv6 address
+   2. car: Get car project password
+      1. ai8: get arrizo 8 project password
+8. server: Supply a HTTP server to get `Get` function through web
 
 
 ## Build

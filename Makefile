@@ -14,10 +14,15 @@ TAG := $(shell sed -rn 's/const version = "(.*)"/\1/p' $(VERSION_FILE))
 OS_LIST := windows darwin linux
 ARCH_LIST := 386 amd64 arm64
 
+IMAGE := golang:1.22
+GOOS := linux
+GOARCH := amd64
+GOPROXY := goproxy.io
+
 auto: $(TARGET)
 
 test:
-		@echo $(TAG)
+		@echo $(IMAGE) $(TAG) $(GOOS) $(GOARCH) $(GOPROXY)
 
 tidy:
 		@go mod tidy
@@ -64,13 +69,17 @@ gen-releases:
 
 build-image:
 		@echo "build docker image"
+		@echo "build $(TAG) $(GOOS)"
 		@docker build -t snail2sky/bbx:$(TAG) \
 			--build-arg GOOS=$(GOOS) \
 			--build-arg GOARCH=$(GOARCH) \
 			--build-arg GOPROXY=$(GOPROXY) \
 			--build-arg BUILD_TYPE=$(BUILD_TYPE) \
-			--build-arg IMAGE=$(IMAGE) \
-			.
+			--build-arg IMAGE=$(IMAGE) .
+
+push-image:
+		@echo "push docker image"
+		@docker push snail2sky/bbx:$(TAG)
 
 clean:
 		@echo "clean bbx bbx.exe program"
@@ -87,4 +96,5 @@ help:
 		@echo "clean-all     make clean-all                  clean all binary files"
 		@echo "install:      make install                    install binary file to GOBIN dir"
 		@echo "build-image:  make build-image [GOOS=[linux|darwin|windows] | GOARCH=[amd64|arm64|...] | GOPROXY=goproxy.io | IMAGE=golang:1.22]"
+		@echo "push-image:   make push-image                 push image to docker hub"
 		@echo "gen-releases: make gen-releases               generate releases into releases/$(TAG)"
