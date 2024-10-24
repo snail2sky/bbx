@@ -37,11 +37,16 @@ jobs:
           GOARCH=${{ matrix.arch }}
           CGO_ENABLED=${{ steps.variables.outputs.cgo_enabled }}
           go build -o bbx-${GOOS}-${GOARCH}
-      # - name: Upload binaries
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: bbx-${{ matrix.arch }}
-      #     path: bbx-${{ matrix.arch }}
+
+      - name: run
+        run: |
+          ls -al; tree
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbx-${{ matrix.os }}-${{ matrix.arch }}
+          path: bbx-${{ matrix.os }}-${{ matrix.arch }}
           
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -49,7 +54,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.Run.outputs.current_tag }}
           files: |
-            ./bbx-${{ matrix.os }}-${{ matrix.arch }}
+            bbx-${{ matrix.os }}-${{ matrix.arch }}
 
   release:
     needs: build
