@@ -4,6 +4,8 @@ FROM $IMAGE as builder
 
 WORKDIR /data0/src/bbx
 
+ENV CGO_ENABLED=0
+
 COPY . .
 
 # 静态编译
