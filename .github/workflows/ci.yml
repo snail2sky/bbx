@@ -29,7 +29,7 @@ jobs:
           GOOS=linux go build -o bbx-${GOARCH}
 
       - name: Upload binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: bbx-${{ matrix.arch }}
           path: bbx-${{ matrix.arch }}
