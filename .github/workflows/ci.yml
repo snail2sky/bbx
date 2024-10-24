@@ -50,14 +50,10 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Github Release
-        uses: elgohr/Github-Release-Action@v5
-        with:
-          title: test release
-          workdir: ./output
-          tag: v1.0.10
+      - name: Generate release notes
+        uses: raulanatol/github-actions-releaser@main
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Release
       #   uses: softprops/action-gh-release@v1
