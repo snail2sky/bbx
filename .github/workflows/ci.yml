@@ -61,9 +61,6 @@ jobs:
         run: |
           ls -al; tree
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -81,6 +78,7 @@ jobs:
         run: |
           ls -al
           tree
+          echo ${{ steps.variables.outputs.tag }}
 
       - name: Build and push Docker image
         run: |
