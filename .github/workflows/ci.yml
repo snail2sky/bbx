@@ -13,7 +13,7 @@ env:
     
 
 jobs:
-  build:
+  build-binary:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,6 +28,8 @@ jobs:
         id: vars
         run: |
           tag=`basename ${{ github.ref }}`
+          echo ${{ steps.vars.outputs.tag }}
+          pwd
         #          golang_version=1.22
         #          cgo_enabled=0
 
@@ -43,16 +45,11 @@ jobs:
           export CGO_ENABLED=${{ env.CGO_ENABLED }}
           go build -o bbx-${GOOS}-${GOARCH}
 
-      - name: run
-        run: |
-          ls -al
-          tree
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: bbx-${{ matrix.os }}-${{ matrix.arch }}
-          path: bbx-${{ matrix.os }}-${{ matrix.arch }}
+          #      - name: Upload binaries
+          #        uses: actions/upload-artifact@v4
+          #        with:
+          #          name: bbx-${{ matrix.os }}-${{ matrix.arch }}
+          #          path: bbx-${{ matrix.os }}-${{ matrix.arch }}
           
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -62,9 +59,10 @@ jobs:
           files: |
             bbx-${{ matrix.os }}-${{ matrix.arch }}
 
-      - name: run
-        run: |
-          ls -al; tree
+  build-image:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -74,11 +72,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: run
-        run: |
-          ls -al
-          tree
 
       - name: Build and push Docker image
         run: |
