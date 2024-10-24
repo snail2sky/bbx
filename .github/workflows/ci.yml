@@ -27,13 +27,13 @@ jobs:
       - name: Set output
         id: set_output
         run: |
-          echo "tag=`basename ${{ github.ref }}`" >> ${GITHUB_OUTPUT}
+          echo "tag=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
           if [ ${{ matrix.os }} = "windows" ]; then
-              exe=bbx-${{ matrix.os }}-${{ matrix.arch }}.exe
+              echo "exe=bbx-${{ matrix.os }}-${{ matrix.arch }}.exe" >> $GITHUB_OUTPUT
           else
-              exe=bbx-${{ matrix.os }}-${{ matrix.arch }}
+              echo "exe=bbx-${{ matrix.os }}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
           fi
-          echo "exe=${exe}" >> ${GITHUB_OUTPUT}
+
           echo ${{ steps.set_output.outputs.tag }}
 
       - name: Set up Go
