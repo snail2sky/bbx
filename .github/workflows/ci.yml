@@ -54,7 +54,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64,linux/arm64 -t snail2sky/bbx:latest . --push
+          # docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64,linux/arm64 -t snail2sky/bbx:latest . --push
+          docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64 -t snail2sky/bbx:latest . --push
 
       - name: Run
         run: |
