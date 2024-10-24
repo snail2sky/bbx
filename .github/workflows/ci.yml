@@ -26,6 +26,7 @@ jobs:
       - name: Build binary
         run: |
           GOARCH=${{ matrix.arch }}
+          CGO_ENABLED=0
           GOOS=linux go build -o bbx-${GOARCH}
 
       - name: Upload binaries
@@ -57,7 +58,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: test
           files: |
             bbx-amd64
             bbx-arm64
