@@ -32,6 +32,7 @@ jobs:
           go-version: ${{ steps.variables.outputs.golang_version }}
 
       - name: Build binary
+        if: ${{ matrix.os }} != windows && ${{ matrix.arch }} != arm64
         run: |
           GOOS=${{ matrix.os }}
           GOARCH=${{ matrix.arch }}
