@@ -7,6 +7,11 @@ on:
   release:
     types: [created]
 
+env:
+  GO_VERSION: 1.22
+  CGO_ENABLED: 0
+    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,13 +34,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.22
+          go-version: $GO_VERSION
 
       - name: Build binary
         run: |
           export GOOS=${{ matrix.os }}
           export GOARCH=${{ matrix.arch }}
-          export CGO_ENABLE=0
+          export CGO_ENABLED=$CGO_ENABLED
           go build -o bbx-${GOOS}-${GOARCH}
 
       - name: run
@@ -53,7 +58,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ steps.variables.outputs.tag }}
+          tag_name: 
           files: |
             bbx-${{ matrix.os }}-${{ matrix.arch }}
 
@@ -74,7 +79,6 @@ jobs:
         run: |
           ls -al
           tree
-          echo ${{ steps.variables.outputs.tag }}
 
       - name: Build and push Docker image
         run: |
