@@ -2,8 +2,6 @@ name: CI
 
 on:
   push:
-    # branches:
-    #   - master
     tags:
       - 'v*.*.*'
   release:
@@ -15,48 +13,43 @@ jobs:
     strategy:
       matrix:
         arch: [amd64, arm64]
+        os: [linux, darwin, windows]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set variables
+        id: variables
+        run: |
+          tag=`basename ${{ github.ref }}`
+          golang_version=1.22
+          cgo_enabled=0
+
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.22'
+          go-version: ${{ steps.variables.outputs.golang_version }}
 
       - name: Build binary
         run: |
+          GOOS=${{ matrix.os }}
           GOARCH=${{ matrix.arch }}
-          CGO_ENABLED=0
-          GOOS=linux go build -o bbx-${GOARCH}
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: bbx-${{ matrix.arch }}
-          path: bbx-${{ matrix.arch }}
-          
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v1
+          CGO_ENABLED=${{ steps.variables.outputs.cgo_enabled }}
+          go build -o bbx-${GOOS}-${GOARCH}
+      # - name: Upload binaries
+      #   uses: actions/upload-artifact@v4
       #   with:
-      #     # tag_name: v1.0.5
-      #     files: |
-      #       bbx-${{ matrix.arch }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      #     name: bbx-${{ matrix.arch }}
+      #     path: bbx-${{ matrix.arch }}
+          
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.Run.outputs.current_tag }}
           files: |
-            ./bbx-${{ matrix.arch }}
-      - name: Generate release notes
-        uses: raulanatol/github-actions-releaser@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ./bbx-${{ matrix.os }}-${{ matrix.arch }}
 
   release:
     needs: build
