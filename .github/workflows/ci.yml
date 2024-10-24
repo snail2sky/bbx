@@ -46,7 +46,6 @@ jobs:
           export GOOS=${{ matrix.os }}
           export GOARCH=${{ matrix.arch }}
           export CGO_ENABLED=${{ env.CGO_ENABLED }}
-          if [ ${GOOS} = "windows" ]; then
           go build -o ${{ steps.set_output.outputs.exe }}
 
       - name: Release
