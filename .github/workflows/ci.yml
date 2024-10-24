@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # arch: [amd64, arm64]
-        arch: [amd64]
+        arch: [amd64, arm64]
 
     steps:
       - name: Checkout code
@@ -35,6 +34,20 @@ jobs:
         with:
           name: bbx-${{ matrix.arch }}
           path: bbx-${{ matrix.arch }}
+          
+      - name: Run
+        run: |
+          ls -a; tree
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.5
+          files: |
+            bbx-amd64
+            bbx-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     needs: build
@@ -60,13 +73,3 @@ jobs:
       - name: Run
         run: |
           ls -a; tree
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v1.0.5
-          files: |
-            bbx-amd64
-            bbx-arm64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
