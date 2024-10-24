@@ -29,9 +29,9 @@ jobs:
         run: |
           echo "tag=`basename ${{ github.ref }}`" >> ${GITHUB_OUTPUT}
           if [ ${{ matrix.os }} = "windows" ]; then
-              exe=bbx-${GOOS}-${GOARCH}.exe
+              exe=bbx-${{ matrix.os }}-${{ matrix.arch }}.exe
           else
-              exe=bbx-${GOOS}-${GOARCH}
+              exe=bbx-${{ matrix.os }}-${{ matrix.arch }}
           fi
           echo "exe=${exe}" >> ${GITHUB_OUTPUT}
           echo ${{ steps.set_output.outputs.tag }}
