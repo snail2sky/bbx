@@ -27,7 +27,7 @@ jobs:
       - name: Set variables
         id: vars
         run: |
-          tag=`basename ${{ github.ref }}`
+          echo "tag=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
           echo ${{ steps.vars.outputs.tag }}
           pwd
         #          golang_version=1.22
