@@ -27,19 +27,11 @@ jobs:
       - name: Set output
         id: set_output
         run: |
-          echo "tag=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
           if [ ${{ matrix.os }} = "windows" ]; then
               echo "exe=bbx-${{ matrix.os }}-${{ matrix.arch }}.exe" >> $GITHUB_OUTPUT
           else
               echo "exe=bbx-${{ matrix.os }}-${{ matrix.arch }}" >> $GITHUB_OUTPUT
           fi
-
-          echo ${{ steps.set_output.outputs.tag }}
-
-
-      - name: show
-        run: |
-          echo ${{ steps.set_output.outputs.tag }}
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -68,6 +60,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set output
+        id: set_output
+        run: |
+          echo "tag=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
