@@ -27,13 +27,14 @@ jobs:
       - name: Set output
         id: set_output
         run: |
-          echo "tag=`basename ${{ github.ref }}`" >> $GITHUB_OUTPUT
+          echo "tag=`basename ${{ github.ref }}`" >> ${GITHUB_OUTPUT}
+          if [ ${{ matrix.os }} = "windows" ]; then
+              exe=bbx-${GOOS}-${GOARCH}.exe
+          else
+              exe=bbx-${GOOS}-${GOARCH}
+          fi
+          echo "exe=${exe}" >> ${GITHUB_OUTPUT}
           echo ${{ steps.set_output.outputs.tag }}
-          pwd
-
-      - name: show
-        run: |
-          echo "Version is ${{ steps.set_output.outputs.tag }}"
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -45,21 +46,16 @@ jobs:
           export GOOS=${{ matrix.os }}
           export GOARCH=${{ matrix.arch }}
           export CGO_ENABLED=${{ env.CGO_ENABLED }}
-          go build -o bbx-${GOOS}-${GOARCH}
+          if [ ${GOOS} = "windows" ]; then
+          go build -o ${{ steps.set_output.outputs.exe }}
 
-          #      - name: Upload binaries
-          #        uses: actions/upload-artifact@v4
-          #        with:
-          #          name: bbx-${{ matrix.os }}-${{ matrix.arch }}
-          #          path: bbx-${{ matrix.os }}-${{ matrix.arch }}
-          
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: 
           files: |
-            bbx-${{ matrix.os }}-${{ matrix.arch }}
+            ${{ steps.set_output.outputs.exe }}
 
   build-image:
     runs-on: ubuntu-latest
@@ -67,6 +63,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -80,4 +77,4 @@ jobs:
       - name: Build and push Docker image
         run: |
           # docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64,linux/arm64 -t snail2sky/bbx:latest . --push
-          docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64 -t snail2sky/bbx:${{ steps.vars.outputs.tag }} . --push
+          docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64 -t snail2sky/bbx:${{ steps.set_output.outputs.tag }} . --push
