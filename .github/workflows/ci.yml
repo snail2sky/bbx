@@ -37,12 +37,6 @@ jobs:
           name: bbx-${{ matrix.arch }}
           path: bbx-${{ matrix.arch }}
           
-      - name: Run
-        id: Run
-        run: |
-          current_tag=`basename ${{ github.ref }}`
-          echo $current_tag
-          
       # - name: Create GitHub Release
       #   uses: softprops/action-gh-release@v1
       #   with:
@@ -59,6 +53,10 @@ jobs:
           tag_name: ${{ steps.Run.outputs.current_tag }}
           files: |
             ./bbx-${{ matrix.arch }}
+      - name: Generate release notes
+        uses: raulanatol/github-actions-releaser@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     needs: build
@@ -80,7 +78,3 @@ jobs:
         run: |
           # docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64,linux/arm64 -t snail2sky/bbx:latest . --push
           docker buildx build --build-arg IMAGE=golang:1.22 --platform linux/amd64 -t snail2sky/bbx:latest . --push
-
-      - name: Run
-        run: |
-          ls -a; tree
