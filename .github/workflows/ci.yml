@@ -44,8 +44,7 @@ jobs:
         with:
           tag_name: v1.0.5
           files: |
-            bbx-amd64
-            bbx-arm64
+            bbx-${{ matrix.arch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
