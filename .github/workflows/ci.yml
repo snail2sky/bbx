@@ -39,14 +39,26 @@ jobs:
         run: |
           ls -a; tree
           
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     # tag_name: v1.0.5
+      #     files: |
+      #       bbx-${{ matrix.arch }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 的令牌发布 Release
         with:
-          # tag_name: v1.0.5
+          tag_name: ${{ github.ref }}  # 使用推送的标签作为版本
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
           files: |
             bbx-${{ matrix.arch }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     needs: build
