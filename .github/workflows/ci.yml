@@ -39,7 +39,8 @@ jobs:
           
       - name: Run
         run: |
-          ls -a; tree
+          current_tag=`basename ${{ github.ref }}`
+          echo $current_tag
           
       # - name: Create GitHub Release
       #   uses: softprops/action-gh-release@v1
