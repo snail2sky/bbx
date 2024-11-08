@@ -44,13 +44,13 @@ make install
 ```shell
 make gen-releases
 
-# Generate with TAG
-make gen-releases TAG=v1.0.1
+# Generate release
+make release
 ```
 
 ## Build docker image
 ```shell
-make build-image
+make build-image IMAGE=golang:1.22
 ```
 
 ## Usage
