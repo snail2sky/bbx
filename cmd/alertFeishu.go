@@ -8,7 +8,7 @@ import (
 
 // alertFeishuCmd represents the feishu command
 var alertFeishuCmd = &cobra.Command{
-	Use:   "feishu '<message>'",
+	Use:   "feishu '<message> | [command]'",
 	Short: "Send message to group",
 	Long:  `Send message to group, support @ somebody`,
 	Args:  cobra.ExactArgs(1),
